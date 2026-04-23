@@ -4,8 +4,11 @@ import com.api.ecommerce.products.domain.Product;
 import com.api.ecommerce.products.domain.ProductCategory;
 import com.api.ecommerce.products.domain.ProductImage;
 import com.api.ecommerce.products.dto.request.CreateProductRequestDTO;
-import com.api.ecommerce.products.infrastructure.IProductCategoryRepository;
-import com.api.ecommerce.products.infrastructure.IProductRepository;
+import com.api.ecommerce.products.dto.response.ProductSinglePageDTO;
+import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRepository;
+import com.api.ecommerce.products.infrastructure.persistence.IProductRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductService implements IProductService{
+
+    @Value("app.url")
+    private String urlApp;
 
     private IProductRepository productRepository;
     private FileStorageService fileStorageService;
@@ -53,4 +59,23 @@ public class ProductService implements IProductService{
 
         productRepository.save(newProduct);
     }
+
+    @Override
+    public ProductSinglePageDTO getSinglePageProductById(Long id) {
+        return productRepository.findById(id)
+                .map(product -> new ProductSinglePageDTO(
+                        product.getId(),
+                        product.getName(),
+                        product.getDescription(),
+                        product.getUnitPrice(),
+                        product.getStock(),
+                        product.getProductCategories().stream()
+                                .map(ProductCategory::getName).toList(),
+                        product.getImages().stream()
+                                .map(image -> urlApp + image.getUrl()).toList()
+                ))
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+
 }
