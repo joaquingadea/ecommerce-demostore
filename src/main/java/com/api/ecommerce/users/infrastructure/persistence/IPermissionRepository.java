@@ -1,4 +1,4 @@
-package com.api.ecommerce.users.infrastructure;
+package com.api.ecommerce.users.infrastructure.persistence;
 
 import com.api.ecommerce.users.domain.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
