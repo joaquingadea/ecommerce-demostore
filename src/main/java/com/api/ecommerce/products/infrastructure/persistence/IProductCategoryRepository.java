@@ -1,4 +1,4 @@
-package com.api.ecommerce.products.infrastructure;
+package com.api.ecommerce.products.infrastructure.persistence;
 
 import com.api.ecommerce.products.domain.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
