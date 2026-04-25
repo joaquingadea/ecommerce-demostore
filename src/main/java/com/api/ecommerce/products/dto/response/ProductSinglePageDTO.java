@@ -9,7 +9,7 @@ public record ProductSinglePageDTO(
         String description,
         BigDecimal price,
         Integer stock,
-        List<String> categories,
-        List<String> images
+        List<?> categories,
+        List<?> images
 ) {
 }
