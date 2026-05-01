@@ -5,9 +5,9 @@ import java.util.List;
 
 public record ProductSinglePageDTO(
         Long id,
-        String title,
+        String name,
         String description,
-        BigDecimal price,
+        BigDecimal unitPrice,
         Integer stock,
         List<?> categories,
         List<?> images
