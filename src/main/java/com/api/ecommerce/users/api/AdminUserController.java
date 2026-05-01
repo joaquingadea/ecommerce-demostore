@@ -22,7 +22,7 @@ public class AdminUserController {
         this.appUserService = appUserService;
     }
 
-    @GetMapping("/customer-list") // AdminUserController
+    @GetMapping("/customer-list")
     public ResponseEntity<Page<UserIdUsernameDTO>> getCustomers(@PageableDefault(size = 10,page = 0) Pageable pageable){
         Pageable pageRequest = PageRequest.of(pageable.getPageNumber(),pageable.getPageSize());
         return ResponseEntity.status(HttpStatus.OK)
