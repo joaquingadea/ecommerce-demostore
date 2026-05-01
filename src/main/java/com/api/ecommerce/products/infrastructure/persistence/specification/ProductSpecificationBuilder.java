@@ -6,15 +6,17 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecificationBuilder {
     public static Specification<Product> build(ProductFilter filter){
-        Specification<Product> spec = ((root, query, cb) -> cb.conjunction());
+        Specification<Product> spec = Specification.where(ProductSpecifications.isActive());
 
         if(filter == null){
             return spec;
         }
-        if(filter.minPrice() != null){
-            spec = spec.and(ProductSpecifications.minPrice(filter.minPrice()));
+        if(filter.search() != null && !filter.search().isBlank()){
+            spec = spec.and(ProductSpecifications.nameContains(filter.search()));
         }
-
+        if(filter.category() != null){
+            spec = spec.and(ProductSpecifications.hasCategory(filter.category()));
+        }
         return spec;
     }
 }
