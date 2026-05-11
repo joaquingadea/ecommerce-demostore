@@ -28,7 +28,7 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig{
 
-    @Value("app.url.frontend")
+    @Value("${app.url.frontend}")
     private String urlFrontend;
 
     @Order(1)
