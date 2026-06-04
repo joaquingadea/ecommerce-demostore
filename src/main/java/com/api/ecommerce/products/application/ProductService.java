@@ -24,8 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,25 +50,33 @@ public class ProductService implements IProductService{
     }
 
     public ProductImage mapToImage(MultipartFile file, Product newProduct){
-        return new ProductImage(1L, fileStorageService.saveFile(file),newProduct);
+        return new ProductImage(null, fileStorageService.saveFile(file),newProduct);
     }
 
     @Override
     public void create(CreateProductDTO requestDTO) {
         Product newProduct = new Product(
-                1L,
+                null,
                 requestDTO.name(),
                 requestDTO.description(),
                 requestDTO.stock(),
                 requestDTO.price(),
                 0,
+                LocalDateTime.now(),
                 null,
                 null,
                 ProductStatus.ACTIVE
         );
 
-        List<ProductImage> images = requestDTO.images()
-                .stream().map(file -> mapToImage(file,newProduct))
+        List<MultipartFile> files =
+                Optional.ofNullable(requestDTO.images())
+                        .orElse(List.of());
+
+
+        List<ProductImage> images =
+                files
+                .stream()
+                .map(file -> mapToImage(file,newProduct))
                 .toList();
 
         List<ProductCategory> categories =
@@ -90,7 +101,7 @@ public class ProductService implements IProductService{
                         product.getProductCategories().stream()
                                 .map(category -> new longAndString(category.getId(),category.getName())).toList(),
                         product.getImages().stream()
-                                .map(image -> new longAndString(image.getId(), urlApp + image.getUrl())).toList()
+                                .map(image -> new longAndString(image.getId(), image.getUrl())).toList()
                 ))
                 .orElseThrow(() -> new EntityNotFoundException("Product not found"));
     }
@@ -119,7 +130,7 @@ public class ProductService implements IProductService{
         Product productRepo = productRepository.findById(id).orElseThrow();
         productRepo.setName(requestDTO.name());
         productRepo.setDescription(requestDTO.description());
-        productRepo.setUnitPrice(requestDTO.price());
+        productRepo.setUnitPrice(requestDTO.unitPrice());
         productRepo.setStock(requestDTO.stock());
 
         List<ProductCategory> categories = categoryRepository.findAllById(requestDTO.categories());
@@ -163,6 +174,12 @@ public class ProductService implements IProductService{
     public void activate(Long id) {
         Product activateProduct = productRepository.findById(id).orElseThrow();
         activateProduct.setStatus(ProductStatus.ACTIVE);
+    }
+
+    @Override
+    public AllDataProductDTO getAllDataProduct(Long id) {
+        return productRepository.findAllDataProjectedById(id)
+                .orElseThrow(() -> new RuntimeException("Not found product!"));
     }
 
 
