@@ -42,8 +42,26 @@ public class CartService implements ICartService{
                 });
     }
 
+    // Delta en matematica representa una cambio finito, incremento o diferencia en una variable
+    public void updateCartItemQuantity(CartItem item, Integer newQuantity,Long userId) {
+        if (!item.getCart().getUser().getId().equals(userId)){
+            throw new RuntimeException("Unauthorized!");
+        }
+        if (newQuantity == 0){
+            Cart cart = item.getCart();
+            cart.getItems().remove(item);
+            return;
+        }
+        if(newQuantity > 0 && newQuantity <= item.getProduct().getStock()){
+            item.setQuantity(newQuantity);
+        }
+        else {
+            throw new RuntimeException("Invalid quantity change!");
+        }
+    }
+
     @Override
-    public void addItem(Long productId,Integer quantity,Long userId) {
+    public void createOrUpdateItem(Long productId,Integer quantity,Long userId) {
         Product product = productRepository.findById(productId).orElseThrow();
         Cart userCart = userRepository.findById(userId).orElseThrow().getUserCart();
         CartItem item = getOrCreateCartItem(userCart,product);
@@ -56,15 +74,8 @@ public class CartService implements ICartService{
         if (newQuantity > product.getStock()){
             throw new RuntimeException("Invalid quantity!");
         }
-        item.setQuantity(newQuantity);
-    }
-    @Override
-    public void increaseItem(Long itemId, Long userId){
-        applyQuantityDelta(itemId,1,userId);
-    }
-    @Override
-    public void decreaseItem(Long itemId, Long userId){
-        applyQuantityDelta(itemId,-1,userId);
+
+        updateCartItemQuantity(item,newQuantity,userId);
     }
 
     @Override
@@ -102,24 +113,5 @@ public class CartService implements ICartService{
         cart.getItems().remove(item);
     }
 
-    // Delta en matematica representa una cambio finito, incremento o diferencia en una variable
-    public void applyQuantityDelta(Long itemId, Integer quantity,Long userId) {
-        CartItem item = cartItemRepository.findById(itemId).orElseThrow();
-        if (!item.getCart().getUser().getId().equals(userId)){
-            throw new RuntimeException("Unauthorized!");
-        }
-        int newQuantity = item.getQuantity() + quantity;
-        if (newQuantity == 0){
-            Cart cart = item.getCart();
-            cart.getItems().remove(item);
-            return;
-        }
-        if(newQuantity > 0 && newQuantity <= item.getProduct().getStock()){
-            item.setQuantity(newQuantity);
-        }
-        else {
-            throw new RuntimeException("Invalid quantity change!");
-        }
-    }
 
 }
