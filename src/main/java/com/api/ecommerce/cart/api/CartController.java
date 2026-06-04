@@ -2,6 +2,7 @@ package com.api.ecommerce.cart.api;
 
 import com.api.ecommerce.cart.application.ICartService;
 import com.api.ecommerce.cart.dto.response.CartItemDTO;
+import com.api.ecommerce.shared.security.jwt.JwtPrincipal;
 import com.api.ecommerce.shared.web.ApiResponse;
 import com.api.ecommerce.users.infrastructure.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
@@ -26,36 +27,36 @@ public class CartController {
     @PostMapping("/item/add/{productId}")
     public ResponseEntity<ApiResponse> addItem(@PathVariable Long productId,
                                                @RequestBody Integer quantity,
-                                               @AuthenticationPrincipal CustomUserDetails userDetails){
-        cartService.addItem(productId,quantity,userDetails.getId());
+                                               @AuthenticationPrincipal JwtPrincipal auth){
+        cartService.addItem(productId,quantity,auth.userId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Product added successfully!"));
     }
     @PatchMapping("/item/increase/{itemId}")
     public ResponseEntity<ApiResponse> increaseItemQuantity(@PathVariable Long itemId,
-                                                            @AuthenticationPrincipal CustomUserDetails userDetails){
-        cartService.increaseItem(itemId,userDetails.getId());
+                                                            @AuthenticationPrincipal JwtPrincipal auth){
+        cartService.increaseItem(itemId,auth.userId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Item updated successfully!"));
     }
     @PatchMapping("/item/decrease/{itemId}")
     public ResponseEntity<ApiResponse> decreaseItemQuantity(@PathVariable Long itemId,
-                                                            @AuthenticationPrincipal CustomUserDetails userDetails){
-        cartService.decreaseItem(itemId,userDetails.getId());
+                                                            @AuthenticationPrincipal JwtPrincipal auth){
+        cartService.decreaseItem(itemId,auth.userId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Item updated successfully!"));
     }
     @DeleteMapping("/item/delete/{itemId}")
     public ResponseEntity<ApiResponse> deleteItem(@PathVariable Long itemId,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails){
-        cartService.deleteItem(itemId, userDetails.getId());
+                                                  @AuthenticationPrincipal JwtPrincipal auth){
+        cartService.deleteItem(itemId, auth.userId());
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Item deleted successfully!"));
     }
     @GetMapping("/get")
-    public ResponseEntity<List<CartItemDTO>> getCart(@AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<List<CartItemDTO>> getCart(@AuthenticationPrincipal JwtPrincipal auth){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(cartService.getCart(userDetails.getId()));
+                .body(cartService.getCart(auth.userId()));
     }
     @GetMapping("/get-total-cart")
-    public ResponseEntity<BigDecimal> getTotalCart(@AuthenticationPrincipal CustomUserDetails userDetails){
+    public ResponseEntity<BigDecimal> getTotalCart(@AuthenticationPrincipal JwtPrincipal auth){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(cartService.getTotal(userDetails.getId()));
+                .body(cartService.getTotal(auth.userId()));
     }
 }
