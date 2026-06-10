@@ -40,13 +40,11 @@ public class ProductService implements IProductService{
     private IProductRepository productRepository;
     private FileStorageService fileStorageService;
     private IProductCategoryRepository categoryRepository;
-    private IProductImageRepository imageRepository;
 
-    public ProductService(IProductRepository productRepository, FileStorageService fileStorageService, IProductCategoryRepository categoryRepository, IProductImageRepository imageRepository) {
+    public ProductService(IProductRepository productRepository, FileStorageService fileStorageService, IProductCategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.fileStorageService = fileStorageService;
         this.categoryRepository = categoryRepository;
-        this.imageRepository = imageRepository;
     }
 
     public ProductImage mapToImage(MultipartFile file, Product newProduct){
@@ -68,13 +66,8 @@ public class ProductService implements IProductService{
                 ProductStatus.ACTIVE
         );
 
-        List<MultipartFile> files =
-                Optional.ofNullable(requestDTO.images())
-                        .orElse(List.of());
-
-
         List<ProductImage> images =
-                files
+                requestDTO.images()
                 .stream()
                 .map(file -> mapToImage(file,newProduct))
                 .toList();
@@ -133,14 +126,23 @@ public class ProductService implements IProductService{
         productRepo.setUnitPrice(requestDTO.unitPrice());
         productRepo.setStock(requestDTO.stock());
 
+        int cantImagesTotal =
+                productRepo.getImages().size() -
+                requestDTO.deleteImages().size() +
+                requestDTO.newImages().size();
+
+        if (cantImagesTotal < 1 || cantImagesTotal > 6){
+            throw new IllegalArgumentException("Invalid quantity images!");
+        }
+
         List<ProductCategory> categories = categoryRepository.findAllById(requestDTO.categories());
         if (categories.size() != requestDTO.categories().size()) {
-            throw new EntityNotFoundException("Category not found");
+            throw new EntityNotFoundException("One or more categories not found!");
         }
 
         productRepo.setProductCategories(categories);
 
-        if (requestDTO.deleteImages() != null && !requestDTO.deleteImages().isEmpty()){
+        if (!requestDTO.deleteImages().isEmpty()){
             productRepo.getImages().removeIf((image) -> {
                    boolean shouldDelete = requestDTO.deleteImages().contains(image.getId());
                    if(shouldDelete){
@@ -149,7 +151,7 @@ public class ProductService implements IProductService{
                    return shouldDelete;
             });
         }
-        if (requestDTO.newImages() != null && !requestDTO.newImages().isEmpty()){
+        if (!requestDTO.newImages().isEmpty()){
             for (MultipartFile file : requestDTO.newImages()) {
                 String savedPath = fileStorageService.saveFile(file);
 
