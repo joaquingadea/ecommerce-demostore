@@ -11,9 +11,6 @@ import com.api.ecommerce.products.dto.response.AllDataProductDTO;
 import com.api.ecommerce.products.infrastructure.persistence.sort.ProductSortBuilder;
 import com.api.ecommerce.shared.web.ApiResponse;
 import com.api.ecommerce.shared.web.PaginationConstants;
-import com.api.ecommerce.users.application.IAppUserService;
-import com.api.ecommerce.users.dto.response.UserIdUsernameDTO;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
@@ -63,7 +60,7 @@ public class AdminProductController {
                 ids
         );
         productService.create(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/get-categories")
