@@ -11,4 +11,5 @@ import java.util.Optional;
 @Repository
 public interface IProductRepository extends JpaRepository<Product,Long>, JpaSpecificationExecutor<Product> {
     Optional<AllDataProductDTO> findAllDataProjectedById(Long id);
+    Optional<Product> findByName(String newProduct);
 }
