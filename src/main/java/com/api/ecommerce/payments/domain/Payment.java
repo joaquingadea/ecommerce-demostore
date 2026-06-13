@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor @NoArgsConstructor
@@ -21,10 +22,12 @@ public class Payment {
 
     private Long mercadoPagoPaymentId;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    private LocalDateTime createdAt;
 
     private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
