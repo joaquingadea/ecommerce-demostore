@@ -7,7 +7,6 @@ import com.api.ecommerce.cart.infrastructure.ICartItemRepository;
 import com.api.ecommerce.cart.infrastructure.ICartRepository;
 import com.api.ecommerce.products.domain.Product;
 import com.api.ecommerce.products.infrastructure.persistence.IProductRepository;
-import com.api.ecommerce.users.domain.AppUser;
 import com.api.ecommerce.users.infrastructure.persistence.IAppUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +21,13 @@ public class CartService implements ICartService{
     private IAppUserRepository userRepository;
     private IProductRepository productRepository;
     private ICartItemRepository cartItemRepository;
+    private ICartRepository cartRepository;
 
-    public CartService(IAppUserRepository userRepository, IProductRepository productRepository, ICartItemRepository cartItemRepository) {
+    public CartService(IAppUserRepository userRepository, IProductRepository productRepository, ICartItemRepository cartItemRepository, ICartRepository cartRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartItemRepository = cartItemRepository;
+        this.cartRepository = cartRepository;
     }
 
     public CartItem getOrCreateCartItem(Cart cart, Product product){
@@ -61,7 +62,7 @@ public class CartService implements ICartService{
     @Override
     public void addToCart(Long productId,Integer quantity,Long userId) {
         Product product = productRepository.findById(productId).orElseThrow();
-        Cart userCart = userRepository.findById(userId).orElseThrow().getUserCart();
+        Cart userCart = cartRepository.findByUserId(userId).orElseThrow();
         CartItem item = getOrCreateCartItem(userCart,product);
 
         if (quantity < 1 || quantity > product.getStock()) {
@@ -118,11 +119,11 @@ public class CartService implements ICartService{
     @Override
     public BigDecimal getTotal(Long userId) {
 
-        AppUser user = userRepository.findById(userId).orElseThrow();
+        Cart cart = cartRepository.findByUserId(userId).orElseThrow();
 
         BigDecimal total = BigDecimal.ZERO;
 
-        for (CartItem item : user.getUserCart().getItems()) {
+        for (CartItem item : cart.getItems()) {
 
             total = total.add(
                     item.getProduct()

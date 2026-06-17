@@ -11,7 +11,7 @@ public class MercadoPagoConfiguration {
     @Value("${mercadopago.access-token}")
     private String accessToken;
 
-    @PostConstruct
+    @PostConstruct // Se ejecuta despues de la iny de dependencias
     public void init() {
         MercadoPagoConfig.setAccessToken(accessToken);
     }
