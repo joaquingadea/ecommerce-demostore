@@ -1,4 +1,4 @@
-package com.api.ecommerce.payments.infrastructure;
+package com.api.ecommerce.payments.infrastructure.mercadopago;
 
 import com.mercadopago.MercadoPagoConfig;
 import jakarta.annotation.PostConstruct;
@@ -11,7 +11,7 @@ public class MercadoPagoConfiguration {
     @Value("${mercadopago.access-token}")
     private String accessToken;
 
-    @PostConstruct // Se ejecuta despues de la iny de dependencias
+    @PostConstruct
     public void init() {
         MercadoPagoConfig.setAccessToken(accessToken);
     }
