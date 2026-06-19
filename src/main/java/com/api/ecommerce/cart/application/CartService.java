@@ -145,5 +145,19 @@ public class CartService implements ICartService{
         cart.getItems().remove(item);
     }
 
+    @Override
+    public void validateCart(Cart cart) {
+        if (cart.getItems() == null || cart.getItems().isEmpty()){
+            throw new RuntimeException("Cart is empty!");
+        }
+
+        cart.getItems().forEach(cartItem -> {
+            boolean b = ((cartItem.getProduct().getStock() - cartItem.getQuantity()) >= 0);
+            if (!b) {
+                throw new RuntimeException("Invalid quantity stock!");
+            }
+        });
+    }
+
 
 }

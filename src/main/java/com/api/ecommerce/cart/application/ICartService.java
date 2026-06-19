@@ -1,5 +1,6 @@
 package com.api.ecommerce.cart.application;
 
+import com.api.ecommerce.cart.domain.Cart;
 import com.api.ecommerce.cart.dto.response.CartItemDTO;
 import org.jspecify.annotations.Nullable;
 
@@ -13,4 +14,5 @@ public interface ICartService {
     List<CartItemDTO> getCart(Long userId);
     BigDecimal getTotal(Long userId);
     void deleteItem(Long itemId,Long userId);
+    void validateCart(Cart cart);
 }
