@@ -18,7 +18,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String preferenceId;
+    private String mercadoPagoPreferenceId;
 
     private Long mercadoPagoPaymentId;
 
