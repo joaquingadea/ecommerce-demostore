@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,11 +20,11 @@ public class Order {
     private LocalDateTime createdAt;
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    private List<OrderDetail> ticket = new ArrayList<>();
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
     @ManyToOne
     private AppUser user;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<Payment> paymentAttempts;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Payment> paymentAttempts = new ArrayList<>();
     private BigDecimal total;
 }
