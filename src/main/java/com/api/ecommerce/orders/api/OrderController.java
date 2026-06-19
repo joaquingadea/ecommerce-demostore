@@ -2,6 +2,7 @@ package com.api.ecommerce.orders.api;
 
 import com.api.ecommerce.orders.application.CheckoutService;
 import com.api.ecommerce.orders.application.IOrderService;
+import com.api.ecommerce.orders.dto.response.CheckoutResponseDTO;
 import com.api.ecommerce.shared.security.jwt.JwtPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,8 @@ public class OrderController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<?> checkout(@AuthenticationPrincipal JwtPrincipal auth){
-        checkoutService.checkout(auth.userId());
+    public ResponseEntity<CheckoutResponseDTO> checkout(@AuthenticationPrincipal JwtPrincipal auth){
         return ResponseEntity.status(HttpStatus.OK)
-                .build();
+                .body(checkoutService.checkout(auth.userId()));
     }
 }
