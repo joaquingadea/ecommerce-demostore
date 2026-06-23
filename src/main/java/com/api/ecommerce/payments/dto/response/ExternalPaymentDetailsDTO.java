@@ -3,10 +3,15 @@ package com.api.ecommerce.payments.dto.response;
 import com.api.ecommerce.payments.domain.PaymentStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-public record PaymentDetailsDTO(
-        String externalPaymentId,
+public record ExternalPaymentDetailsDTO(
+        String id,
         PaymentStatus status,
-        BigDecimal amount
+        BigDecimal amount,
+        String orderId,
+        String paymentType,       // credit_card, debit_card, etc.
+        LocalDateTime createdAt,
+        LocalDateTime approvedAt // puede ser null si no está aprobado
 ) {
 }
