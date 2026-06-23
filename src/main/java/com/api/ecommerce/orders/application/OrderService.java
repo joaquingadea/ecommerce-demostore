@@ -20,7 +20,6 @@ public class OrderService implements IOrderService{
         this.orderRepository = orderRepository;
     }
 
-    @Override
     public Order createOrderFromCart(Cart cart) {
         Order order = new Order();
         List<OrderDetail> orderDetails = cart.getItems().stream()
@@ -48,4 +47,10 @@ public class OrderService implements IOrderService{
         return order;
     }
 
+    @Override
+    public Order getOrCreateOrder(Long userId, Cart cart) {
+        return orderRepository
+                .findByUserIdAndStatus(userId,OrderStatus.PENDING)
+                .orElseGet(() -> createOrderFromCart(cart));
+    }
 }
