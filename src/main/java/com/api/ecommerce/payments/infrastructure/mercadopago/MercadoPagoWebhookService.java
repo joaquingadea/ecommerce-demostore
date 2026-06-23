@@ -3,7 +3,7 @@ package com.api.ecommerce.payments.infrastructure.mercadopago;
 import com.api.ecommerce.orders.application.IOrderService;
 import com.api.ecommerce.payments.domain.PaymentGateway;
 import com.api.ecommerce.payments.domain.PaymentStatus;
-import com.api.ecommerce.payments.dto.response.PaymentDetailsDTO;
+import com.api.ecommerce.payments.dto.response.ExternalPaymentDetailsDTO;
 import com.api.ecommerce.payments.infrastructure.mercadopago.dto.request.MercadoPagoNotificationDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +26,7 @@ public class MercadoPagoWebhookService {
 
             String paymentId = notification.getData().getId();
 
-            PaymentDetailsDTO payment = paymentGateway.getPayment(paymentId);
+            ExternalPaymentDetailsDTO payment = paymentGateway.getPayment(paymentId);
 
             if (payment.status().equals(PaymentStatus.APPROVED)) {
                 //orderService.markAsPaid(payment);
