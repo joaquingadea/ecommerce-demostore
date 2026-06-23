@@ -10,7 +10,6 @@ import com.mercadopago.resources.payment.Payment;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,7 +68,7 @@ public class MercadoPagoMapper {
                 .toList();
 
         return new CreatePreferenceDTO(
-                dto.orderId().toString(),
+                dto.paymentId().toString(),
                 items,
                 backUrls
         );
