@@ -3,11 +3,10 @@ package com.api.ecommerce.payments.infrastructure.mercadopago;
 import com.api.ecommerce.payments.domain.PaymentGateway;
 import com.api.ecommerce.payments.dto.request.CreatePaymentDTO;
 import com.api.ecommerce.payments.dto.response.PaymentCreationResultDTO;
-import com.api.ecommerce.payments.dto.response.PaymentDetailsDTO;
+import com.api.ecommerce.payments.dto.response.ExternalPaymentDetailsDTO;
 import com.api.ecommerce.payments.infrastructure.mercadopago.dto.MercadoPagoMapper;
 import com.api.ecommerce.payments.infrastructure.mercadopago.dto.request.CreatePreferenceDTO;
 import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.paymentmethod.PaymentMethodClient;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
@@ -25,20 +24,30 @@ public class MercadoPagoPaymentGateway implements PaymentGateway {
     private String urlBackend;
 
     private final MercadoPagoMapper mercadoPagoMapper;
+    private final PreferenceClient preferenceClient;
+    private final PaymentClient paymentClient;
 
-    public MercadoPagoPaymentGateway(MercadoPagoMapper mercadoPagoMapper) {
+    public MercadoPagoPaymentGateway(MercadoPagoMapper mercadoPagoMapper, PreferenceClient preferenceClient, PaymentClient paymentClient) {
         this.mercadoPagoMapper = mercadoPagoMapper;
+        this.preferenceClient = preferenceClient;
+        this.paymentClient = paymentClient;
     }
 
     @Override
-    public PaymentDetailsDTO getPayment(String externalPaymentId) {
-        return null;
+    public ExternalPaymentDetailsDTO getPayment(String externalPaymentId) {
+        try {
+            Payment paymentMP = paymentClient.get(Long.valueOf(externalPaymentId));
+            return mercadoPagoMapper.toExternalPaymentDetailsDTO(paymentMP);
+        }
+        catch (MPException | MPApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public PaymentCreationResultDTO createPayment(CreatePaymentDTO request){
 
-        CreatePreferenceDTO dto = mercadoPagoMapper.toPreference(request);
+        CreatePreferenceDTO dto = mercadoPagoMapper.toCreatePreferenceDTO(request);
 
         Preference preference = createPreference(dto);
 
@@ -57,10 +66,8 @@ public class MercadoPagoPaymentGateway implements PaymentGateway {
                 .backUrls(dto.backUrls())
                 .build();
 
-        PreferenceClient client = new PreferenceClient();
-
         try {
-            return client.create(preferenceRequest);
+            return preferenceClient.create(preferenceRequest);
         }
         catch (MPException | MPApiException e) {
             throw new RuntimeException(e);
