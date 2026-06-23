@@ -37,9 +37,9 @@ public class CheckoutService {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow();
         cartService.validateCart(cart);
         // se crea la orden para BD
-        Order order = orderService.createOrderFromCart(cart);
-        // se crea el intento de pago
-        Payment payment = paymentService.createAttemptPayment(order);
+        Order order = orderService.getOrCreateOrder(userId,cart);
+        // se crea el intento de pago o se obtiene el pendiente (se tira una excepcion si esta aprobado)
+        Payment payment = paymentService.getOrCreateAttemptPayment(order);
         // payment de MP
         CreatePaymentDTO requestDTO = new CreatePaymentDTO(
                 order.getId(),
