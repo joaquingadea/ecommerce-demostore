@@ -32,10 +32,10 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig{
 
-    @Value("${app.url.frontend}")
-    private String urlFrontend;
-    @Value("${app.url.frontend.1}")
-    private String urlFrontend1;
+    @Value("${app.url.frontend.ecommerce}")
+    private String urlFrontEcommerce;
+    @Value("${app.url.frontend.dashboard.admin}")
+    private String urlFrontDashAdmin;
 
     private final JwtService jwtService;
 
@@ -53,7 +53,7 @@ public class SecurityConfig{
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/login", "/auth/register", "/products/**").permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/products/**", "/webhooks/mercadopago").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -82,8 +82,8 @@ public class SecurityConfig{
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin(urlFrontend);
-        configuration.addAllowedOrigin(urlFrontend1);
+        configuration.addAllowedOrigin(urlFrontEcommerce);
+        configuration.addAllowedOrigin(urlFrontDashAdmin);
         configuration.setAllowedMethods(List.of("GET","OPTIONS","PATCH","PUT","DELETE","POST"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
