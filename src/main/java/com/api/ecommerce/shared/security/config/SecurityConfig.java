@@ -34,6 +34,8 @@ public class SecurityConfig{
 
     @Value("${app.url.frontend}")
     private String urlFrontend;
+    @Value("${app.url.frontend.1}")
+    private String urlFrontent1;
 
     private JwtService jwtService;
 
@@ -51,19 +53,8 @@ public class SecurityConfig{
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers(
-                                "/auth/login",
-                                "/auth/register",
-                                "/admin/**",
-                                "/products/**"
-                        ).permitAll()
+                        .requestMatchers("/auth/login", "/auth/register", "/products/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers(
-                                "/cart/**",
-                                "/order/**",
-                                "/auth/me"
-                        ).authenticated()
-
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(
@@ -92,7 +83,7 @@ public class SecurityConfig{
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(urlFrontend);
-        configuration.addAllowedOrigin("http://127.0.0.1:5500");
+        configuration.addAllowedOrigin(urlFrontent1);
         configuration.setAllowedMethods(List.of("GET","OPTIONS","PATCH","PUT","DELETE","POST"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
