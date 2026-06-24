@@ -37,7 +37,7 @@ public class SecurityConfig{
     @Value("${app.url.frontend.1}")
     private String urlFrontend1;
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     public SecurityConfig(JwtService jwtService) {
         this.jwtService = jwtService;
