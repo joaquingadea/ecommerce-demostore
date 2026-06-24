@@ -35,7 +35,7 @@ public class SecurityConfig{
     @Value("${app.url.frontend}")
     private String urlFrontend;
     @Value("${app.url.frontend.1}")
-    private String urlFrontent1;
+    private String urlFrontend1;
 
     private JwtService jwtService;
 
@@ -83,7 +83,7 @@ public class SecurityConfig{
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin(urlFrontend);
-        configuration.addAllowedOrigin(urlFrontent1);
+        configuration.addAllowedOrigin(urlFrontend1);
         configuration.setAllowedMethods(List.of("GET","OPTIONS","PATCH","PUT","DELETE","POST"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
