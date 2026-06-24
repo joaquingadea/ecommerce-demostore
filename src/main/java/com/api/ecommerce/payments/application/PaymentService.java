@@ -29,8 +29,9 @@ public class PaymentService implements IPaymentService {
                 LocalDateTime.now(),
                 order.getTotal(),
                 PaymentStatus.PENDING,
-                order
+                null
         );
+        order.addPaymentAttempt(payment);
         paymentRepository.save(payment);
         return payment;
     }
