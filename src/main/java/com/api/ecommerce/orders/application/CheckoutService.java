@@ -11,12 +11,16 @@ import com.api.ecommerce.payments.domain.PaymentGateway;
 import com.api.ecommerce.payments.dto.request.CreatePaymentDTO;
 import com.api.ecommerce.payments.dto.request.PaymentItemDTO;
 import com.api.ecommerce.payments.dto.response.PaymentCreationResultDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class CheckoutService {
+
+    @Value("${app.url.frontend.ecommerce}")
+    private String urlFrontEcommerce;
 
     private final PaymentGateway paymentGateway;
     private final IPaymentService paymentService;
@@ -51,9 +55,9 @@ public class CheckoutService {
                         orderDetail.getProduct().getImages().get(0).getUrl(),
                         orderDetail.getUnitPrice()
                 )).toList(),
-                null, // falta la configuracion de las url's
-                null,
-                null
+                urlFrontEcommerce + "/mp/success",
+                urlFrontEcommerce + "/mp/pending",
+                urlFrontEcommerce + "/mp/failure"
         );
 
         PaymentCreationResultDTO paymentResultDTO = paymentGateway.createPayment(requestDTO);
