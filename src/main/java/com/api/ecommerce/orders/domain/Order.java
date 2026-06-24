@@ -27,4 +27,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Payment> paymentAttempts = new ArrayList<>();
     private BigDecimal total;
+
+    public void addPaymentAttempt(Payment payment) {
+        paymentAttempts.add(payment);
+        payment.setOrder(this);
+    }
 }
