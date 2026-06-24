@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class PaymentService implements IPaymentService {
 
-    private IPaymentRepository paymentRepository;
+    private final IPaymentRepository paymentRepository;
 
 
     public PaymentService(IPaymentRepository paymentRepository) {
