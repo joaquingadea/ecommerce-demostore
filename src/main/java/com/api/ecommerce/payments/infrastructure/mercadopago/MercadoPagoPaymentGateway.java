@@ -63,7 +63,8 @@ public class MercadoPagoPaymentGateway implements PaymentGateway {
         PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                 .items(dto.items())
                 .externalReference(dto.externalReference())
-                .backUrls(dto.backUrls())
+                //.backUrls(dto.backUrls())
+                .notificationUrl(urlBackend + "/webhooks/mercadopago")
                 .build();
 
         try {
