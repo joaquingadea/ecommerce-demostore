@@ -23,8 +23,8 @@ import java.util.List;
 @RequestMapping ("/order")
 public class OrderController {
 
-    private IOrderService orderService;
-    private CheckoutService checkoutService;
+    private final IOrderService orderService;
+    private final CheckoutService checkoutService;
 
     public OrderController(IOrderService orderService, CheckoutService checkoutService) {
         this.orderService = orderService;

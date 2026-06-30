@@ -23,8 +23,8 @@ import java.util.List;
 @Transactional
 public class OrderService implements IOrderService{
 
-    private IOrderRepository orderRepository;
-    private IOrderDetailRepository orderDetailRepository;
+    private final IOrderRepository orderRepository;
+    private final IOrderDetailRepository orderDetailRepository;
 
     public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository) {
         this.orderRepository = orderRepository;
