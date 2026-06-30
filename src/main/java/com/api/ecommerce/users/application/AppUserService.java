@@ -90,6 +90,7 @@ public class AppUserService implements IAppUserService{
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);
         newUser.setEnabled(true);
+        newUser.setRole(AppUserRole.USER);
 
         appUserRepository.save(newUser);
         return new RegisterResponseDTO("Successfully created user!");
