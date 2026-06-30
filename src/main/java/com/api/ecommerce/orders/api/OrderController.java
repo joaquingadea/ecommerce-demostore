@@ -46,4 +46,10 @@ public class OrderController {
                 .body(orderService.getMyOrders(auth.userId(),pageRequest));
     }
 
+    @GetMapping("/get-my-order-details")
+    public ResponseEntity<List<MyOrderDetailsDTO>> getMyOrderDetails(@RequestParam Long orderId, @AuthenticationPrincipal JwtPrincipal auth){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.getMyOrderDetails(orderId,auth.userId()));
+    }
+
 }
