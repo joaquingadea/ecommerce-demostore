@@ -33,12 +33,12 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class AppUserService implements IAppUserService{
 
-    private IAppUserRepository appUserRepository;
-    private UserDetailsServiceImp userDetailsServiceImp;
-    private JwtService jwtService;
-    private CookieService cookieService;
-    private PasswordEncoder passwordEncoder;
-    private IRoleRepository roleRepository;
+    private final IAppUserRepository appUserRepository;
+    private final UserDetailsServiceImp userDetailsServiceImp;
+    private final JwtService jwtService;
+    private final CookieService cookieService;
+    private final PasswordEncoder passwordEncoder;
+    private final IRoleRepository roleRepository;
 
     public AppUserService(IAppUserRepository appUserRepository, UserDetailsServiceImp userDetailsServiceImp, JwtService jwtService, CookieService cookieService, PasswordEncoder passwordEncoder, IRoleRepository roleRepository) {
         this.appUserRepository = appUserRepository;

@@ -23,9 +23,9 @@ import java.util.List;
 @RequestMapping("/admin/user")
 public class AdminUserController {
 
-    private IAppUserService appUserService;
-    private IRoleService roleService;
-    private IPermissionService permissionService;
+    private final IAppUserService appUserService;
+    private final IRoleService roleService;
+    private final IPermissionService permissionService;
 
     public AdminUserController(IAppUserService appUserService, IRoleService roleService, IPermissionService permissionService) {
         this.appUserService = appUserService;

@@ -23,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private IAppUserService userService;
+    private final IAppUserService userService;
 
     public AuthController(IAppUserService userService) {
         this.userService = userService;
