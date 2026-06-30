@@ -9,6 +9,7 @@ import com.api.ecommerce.products.dto.request.CreateProductDTO;
 import com.api.ecommerce.products.dto.request.EditProductDTO;
 import com.api.ecommerce.products.dto.request.ProductFilter;
 import com.api.ecommerce.products.dto.response.AllDataProductDTO;
+import com.api.ecommerce.products.dto.response.LatestProductDTO;
 import com.api.ecommerce.products.dto.response.ProductSinglePageDTO;
 import com.api.ecommerce.products.dto.response.PublicProductDTO;
 import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRepository;
@@ -126,10 +127,18 @@ public class ProductService implements IProductService{
         productRepo.setUnitPrice(requestDTO.unitPrice());
         productRepo.setStock(requestDTO.stock());
 
+        List<Long> deleteImages = requestDTO.deleteImages() == null
+                ? List.of()
+                : requestDTO.deleteImages();
+
+        List<MultipartFile> newImages = requestDTO.newImages() == null
+                ? List.of()
+                : requestDTO.newImages();
+
         int cantImagesTotal =
                 productRepo.getImages().size() -
-                requestDTO.deleteImages().size() +
-                requestDTO.newImages().size();
+                deleteImages.size() +
+                newImages.size();
 
         if (cantImagesTotal < 1 || cantImagesTotal > 6){
             throw new IllegalArgumentException("Invalid quantity images!");
@@ -142,17 +151,17 @@ public class ProductService implements IProductService{
 
         productRepo.setProductCategories(categories);
 
-        if (!requestDTO.deleteImages().isEmpty()){
+        if (!deleteImages.isEmpty()){
             productRepo.getImages().removeIf((image) -> {
-                   boolean shouldDelete = requestDTO.deleteImages().contains(image.getId());
+                   boolean shouldDelete = deleteImages.contains(image.getId());
                    if(shouldDelete){
                         fileStorageService.deleteImage(image.getUrl());
                    }
                    return shouldDelete;
             });
         }
-        if (!requestDTO.newImages().isEmpty()){
-            for (MultipartFile file : requestDTO.newImages()) {
+        if (!newImages.isEmpty()){
+            for (MultipartFile file : newImages) {
                 String savedPath = fileStorageService.saveFile(file);
 
                 ProductImage image = new ProductImage();
