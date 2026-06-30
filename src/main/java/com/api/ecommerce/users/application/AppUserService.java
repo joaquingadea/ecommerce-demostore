@@ -110,4 +110,11 @@ public class AppUserService implements IAppUserService{
         userRepo.getRoleList().add(admin);
     }
 
+    @Override
+    public void revokeAdmin(Long userId) {
+        AppUser userRepo = appUserRepository.findById(userId).orElseThrow();
+        userRepo.setRole(AppUserRole.USER);
+        Role admin = roleRepository.findByName("ADMIN").orElseThrow();
+        userRepo.getRoleList().remove(admin);
+    }
 }
