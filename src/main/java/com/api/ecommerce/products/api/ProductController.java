@@ -1,15 +1,17 @@
 package com.api.ecommerce.products.api;
 
+import com.api.ecommerce.products.application.IProductCategoryService;
 import com.api.ecommerce.products.application.IProductService;
 import com.api.ecommerce.products.dto.request.ProductFilter;
-import com.api.ecommerce.products.dto.response.AllDataProductDTO;
+import com.api.ecommerce.products.dto.response.LatestProductDTO;
 import com.api.ecommerce.products.dto.response.ProductSinglePageDTO;
+import com.api.ecommerce.products.dto.response.PublicCategoryDTO;
 import com.api.ecommerce.products.dto.response.PublicProductDTO;
 import com.api.ecommerce.products.infrastructure.persistence.sort.ProductSortBuilder;
-import com.api.ecommerce.shared.web.ApiResponse;
 import com.api.ecommerce.shared.web.PaginationConstants;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -17,15 +19,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
     private IProductService productService;
+    private IProductCategoryService categoryService;
 
-    public ProductController(IProductService productService) {
+    public ProductController(IProductService productService, IProductCategoryService categoryService) {
         this.productService = productService;
+        this.categoryService = categoryService;
     }
 
 
