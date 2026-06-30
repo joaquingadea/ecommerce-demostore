@@ -24,6 +24,8 @@ public class AppUser {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+    @Enumerated(EnumType.STRING)
+    private AppUserRole role;
     @ManyToMany
     @JoinTable(name = "user_role",
     joinColumns = @JoinColumn(name = "user_id"),
