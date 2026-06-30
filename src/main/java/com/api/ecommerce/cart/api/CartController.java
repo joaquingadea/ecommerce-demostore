@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/cart")
 public class CartController {
 
-    private ICartService cartService;
+    private final ICartService cartService;
 
     public CartController(ICartService cartService) {
         this.cartService = cartService;

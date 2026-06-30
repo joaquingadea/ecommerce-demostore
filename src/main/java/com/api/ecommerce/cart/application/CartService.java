@@ -18,10 +18,10 @@ import java.util.List;
 @Transactional
 public class CartService implements ICartService{
 
-    private IAppUserRepository userRepository;
-    private IProductRepository productRepository;
-    private ICartItemRepository cartItemRepository;
-    private ICartRepository cartRepository;
+    private final IAppUserRepository userRepository;
+    private final IProductRepository productRepository;
+    private final ICartItemRepository cartItemRepository;
+    private final ICartRepository cartRepository;
 
     public CartService(IAppUserRepository userRepository, IProductRepository productRepository, ICartItemRepository cartItemRepository, ICartRepository cartRepository) {
         this.userRepository = userRepository;
