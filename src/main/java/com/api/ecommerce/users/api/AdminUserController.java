@@ -46,6 +46,11 @@ public class AdminUserController {
         appUserService.revokeAdmin(userId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+    @PatchMapping("/set-admin/{userId}")
+    public ResponseEntity<Void> setAdmin(@PathVariable Long userId){
+        appUserService.setAdmin(userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
     @GetMapping("/get-roles")
     public ResponseEntity<List<Role>> getRoles(){
