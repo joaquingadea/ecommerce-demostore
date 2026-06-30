@@ -34,6 +34,11 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("/get-categories")
+    public ResponseEntity<List<PublicCategoryDTO>> getCategories(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(categoryService.getPublicCategories());
+    }
 
     @GetMapping("/get-single-page/{id}")
     public ResponseEntity<ProductSinglePageDTO> getById(@PathVariable Long id){
