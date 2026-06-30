@@ -60,4 +60,12 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(productService.getPublicProducts(filter,pageRequest));
     }
+    @GetMapping("/get/latest")
+    public ResponseEntity<List<LatestProductDTO>> latestProducts(Pageable pageable) throws BadRequestException {
+        Sort sort = Sort.by(Sort.Direction.DESC, "uploadDate");
+        Pageable pageRequest = PaginationConstants.validatePageable(pageable.getPageNumber(),pageable.getPageSize(),sort);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(productService.getLatestProducts(pageRequest));
+    }
+
 }
