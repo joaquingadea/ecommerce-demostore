@@ -193,5 +193,10 @@ public class ProductService implements IProductService{
                 .orElseThrow(() -> new RuntimeException("Not found product!"));
     }
 
+    @Override
+    public List<LatestProductDTO> getLatestProducts(Pageable pageable) {
+        return productRepository.findLatestProducts(pageable);
+    }
+
 
 }
