@@ -35,4 +35,9 @@ public class AdminOrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(orderService.getOrders(ordersPageable));
     }
+    @GetMapping("/get-details/{orderId}")
+    public ResponseEntity<List<OrderDetailDTO>> getOrderDetails(@PathVariable Long orderId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.getOrderDetails(orderId));
+    }
 }
