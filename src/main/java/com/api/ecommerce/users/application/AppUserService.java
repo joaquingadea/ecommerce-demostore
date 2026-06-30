@@ -50,8 +50,8 @@ public class AppUserService implements IAppUserService{
     }
 
     @Override
-    public Page<UserIdUsernameDTO> findAllIdAndUsername(Pageable pageRequest) {
-        return appUserRepository.findAllIdAndUsername(pageRequest);
+    public Page<UserIdUsernameRoleDTO> findAllIdAndUsernameAndRole(Pageable pageRequest,Long adminId) {
+        return appUserRepository.findAllIdAndUsernameAndRole(pageRequest,adminId);
     }
     @Override
     public LoginResponseDTO loginUser(@Valid LoginRequestDTO request, HttpServletResponse response){
