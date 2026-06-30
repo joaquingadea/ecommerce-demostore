@@ -1,6 +1,7 @@
 package com.api.ecommerce.products.application;
 
 import com.api.ecommerce.products.domain.ProductCategory;
+import com.api.ecommerce.products.dto.response.PublicCategoryDTO;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface IProductCategoryService {
     void edit(Long id, String newName);
     Page<ProductCategory> getAll(Pageable pageRequest);
     List<ProductCategory> getCategoryList();
+    List<PublicCategoryDTO> getPublicCategories();
 }
