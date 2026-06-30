@@ -101,4 +101,13 @@ public class AppUserService implements IAppUserService{
         cookieService.deleteCookie("jwt",response);
         return new ApiResponse("Successfully logout!");
     }
+
+    @Override
+    public void setAdmin(Long userId) {
+        AppUser userRepo = appUserRepository.findById(userId).orElseThrow();
+        userRepo.setRole(AppUserRole.ADMIN);
+        Role admin = roleRepository.findByName("ADMIN").orElseThrow();
+        userRepo.getRoleList().add(admin);
+    }
+
 }
