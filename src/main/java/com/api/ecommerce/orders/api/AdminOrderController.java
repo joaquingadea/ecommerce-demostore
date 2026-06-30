@@ -26,4 +26,13 @@ public class AdminOrderController {
         this.orderService = orderService;
     }
 
+    @GetMapping("/get")
+    public ResponseEntity<Page<OrderDTO>> getOrders(
+            @RequestParam(required = false) String sortByDate,
+            @PageableDefault(page = 0,size = 8)Pageable pageable) throws BadRequestException {
+        Sort ordersSort = OrderSortBuilder.build(sortByDate);
+        Pageable ordersPageable = PaginationConstants.validatePageable(pageable.getPageNumber(),pageable.getPageSize(),ordersSort);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.getOrders(ordersPageable));
+    }
 }
