@@ -5,12 +5,15 @@ import com.api.ecommerce.shared.security.cookie.CookieService;
 import com.api.ecommerce.shared.security.jwt.JwtService;
 import com.api.ecommerce.shared.web.ApiResponse;
 import com.api.ecommerce.users.domain.AppUser;
+import com.api.ecommerce.users.domain.AppUserRole;
+import com.api.ecommerce.users.domain.Role;
 import com.api.ecommerce.users.dto.request.LoginRequestDTO;
 import com.api.ecommerce.users.dto.request.RegisterRequestDTO;
 import com.api.ecommerce.users.dto.response.LoginResponseDTO;
 import com.api.ecommerce.users.dto.response.RegisterResponseDTO;
-import com.api.ecommerce.users.dto.response.UserIdUsernameDTO;
+import com.api.ecommerce.users.dto.response.UserIdUsernameRoleDTO;
 import com.api.ecommerce.users.infrastructure.persistence.IAppUserRepository;
+import com.api.ecommerce.users.infrastructure.persistence.IRoleRepository;
 import com.api.ecommerce.users.infrastructure.security.UserDetailsServiceImp;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -35,13 +38,15 @@ public class AppUserService implements IAppUserService{
     private JwtService jwtService;
     private CookieService cookieService;
     private PasswordEncoder passwordEncoder;
+    private IRoleRepository roleRepository;
 
-    public AppUserService(IAppUserRepository appUserRepository, UserDetailsServiceImp userDetailsServiceImp, JwtService jwtService, CookieService cookieService, PasswordEncoder passwordEncoder) {
+    public AppUserService(IAppUserRepository appUserRepository, UserDetailsServiceImp userDetailsServiceImp, JwtService jwtService, CookieService cookieService, PasswordEncoder passwordEncoder, IRoleRepository roleRepository) {
         this.appUserRepository = appUserRepository;
         this.userDetailsServiceImp = userDetailsServiceImp;
         this.jwtService = jwtService;
         this.cookieService = cookieService;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
