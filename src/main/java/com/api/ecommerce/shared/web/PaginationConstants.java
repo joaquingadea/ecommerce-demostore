@@ -14,7 +14,7 @@ public class PaginationConstants {
             pageNumber = 0;
         }
         if ((pageSize <= 0) || (pageSize > MAX_PAGE_SIZE)){
-            throw new BadRequestException("Page size must be greater than 0 and must not exceed " + MAX_PAGE_SIZE);
+            pageSize = DEFAULT_PAGE_SIZE;
         }
         return PageRequest.of(
                 pageNumber,
