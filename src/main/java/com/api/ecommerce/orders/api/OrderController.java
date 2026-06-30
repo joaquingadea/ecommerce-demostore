@@ -52,4 +52,9 @@ public class OrderController {
                 .body(orderService.getMyOrderDetails(orderId,auth.userId()));
     }
 
+    @GetMapping("/get-my-pending-order")
+    public ResponseEntity<MyOrderDTO> getMyPendingOrder(@AuthenticationPrincipal JwtPrincipal auth){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.getMyPendingOrder(auth.userId()));
+    }
 }
