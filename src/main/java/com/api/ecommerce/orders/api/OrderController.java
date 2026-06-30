@@ -3,13 +3,21 @@ package com.api.ecommerce.orders.api;
 import com.api.ecommerce.orders.application.CheckoutService;
 import com.api.ecommerce.orders.application.IOrderService;
 import com.api.ecommerce.orders.dto.response.CheckoutResponseDTO;
+import com.api.ecommerce.orders.dto.response.MyOrderDTO;
+import com.api.ecommerce.orders.dto.response.MyOrderDetailsDTO;
 import com.api.ecommerce.shared.security.jwt.JwtPrincipal;
+import com.api.ecommerce.shared.web.PaginationConstants;
+import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping ("/order")
@@ -28,4 +36,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(checkoutService.checkout(auth.userId()));
     }
+    @GetMapping("/get-my-orders")
+    public ResponseEntity<Page<MyOrderDTO>> getMyOrders(
+            @PageableDefault(size = 8, page = 0) Pageable pageable,
+            @AuthenticationPrincipal JwtPrincipal auth) throws BadRequestException {
+        Sort sort = Sort.by("createdAt").descending();
+        Pageable pageRequest = PaginationConstants.validatePageable(pageable.getPageNumber(),pageable.getPageSize(),sort);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(orderService.getMyOrders(auth.userId(),pageRequest));
+    }
+
 }
