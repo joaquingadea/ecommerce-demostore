@@ -34,8 +34,8 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminProductController {
 
-    private IProductService productService;
-    private IProductCategoryService productCategoryService;
+    private final IProductService productService;
+    private final IProductCategoryService productCategoryService;
 
     public AdminProductController(IProductService productService, IProductCategoryService productCategoryService) {
         this.productService = productService;

@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class ProductCategoryService implements IProductCategoryService{
 
-    private IProductCategoryRepository productCategoryRepository;
+    private final IProductCategoryRepository productCategoryRepository;
 
     public ProductCategoryService(IProductCategoryRepository productCategoryRepository) {
         this.productCategoryRepository = productCategoryRepository;

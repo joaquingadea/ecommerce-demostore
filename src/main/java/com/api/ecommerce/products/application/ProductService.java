@@ -38,9 +38,9 @@ public class ProductService implements IProductService{
     @Value("${app.url}")
     private String urlApp;
 
-    private IProductRepository productRepository;
-    private FileStorageService fileStorageService;
-    private IProductCategoryRepository categoryRepository;
+    private final IProductRepository productRepository;
+    private final FileStorageService fileStorageService;
+    private final IProductCategoryRepository categoryRepository;
 
     public ProductService(IProductRepository productRepository, FileStorageService fileStorageService, IProductCategoryRepository categoryRepository) {
         this.productRepository = productRepository;
