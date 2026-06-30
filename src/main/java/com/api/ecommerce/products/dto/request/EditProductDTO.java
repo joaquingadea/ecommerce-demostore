@@ -15,9 +15,8 @@ public record EditProductDTO(
         BigDecimal unitPrice,
         @Min(value = 0)
         Integer stock,
-        @NotNull
         List<Long> deleteImages,
-        @Size(max = 6) @NotNull
+        @Size(max = 6)
         List<MultipartFile> newImages,
         @Size(min = 1)
         List<Long> categories
