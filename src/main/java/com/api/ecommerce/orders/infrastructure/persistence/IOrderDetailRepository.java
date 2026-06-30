@@ -22,4 +22,11 @@ public interface IOrderDetailRepository extends JpaRepository<OrderDetail,Long> 
         WHERE od.order.id = :orderId
     """)
     List<OrderDetailDTO> findByOrderId(@Param("orderId")Long orderId);
+    @Query("""
+        SELECT  od.product.name AS productName, od.quantity AS quantity, od.subtotal AS subtotal, od.unitPrice AS unitPrice
+        FROM OrderDetail od
+        WHERE od.order.id = :orderId
+        AND od.order.user.id = :userId
+    """)
+    List<MyOrderDetailsDTO> findByOrderIdAndUserId(Long orderId, Long userId);
 }
