@@ -1,6 +1,7 @@
 package com.api.ecommerce.products.application;
 
 import com.api.ecommerce.products.domain.ProductCategory;
+import com.api.ecommerce.products.dto.response.PublicCategoryDTO;
 import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,5 +39,10 @@ public class ProductCategoryService implements IProductCategoryService{
     @Override
     public List<ProductCategory> getCategoryList() {
         return productCategoryRepository.findAll();
+    }
+
+    @Override
+    public List<PublicCategoryDTO> getPublicCategories() {
+        return productCategoryRepository.findAllPublicCategories();
     }
 }
