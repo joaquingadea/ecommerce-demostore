@@ -13,6 +13,7 @@ import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRep
 import com.api.ecommerce.products.infrastructure.persistence.IProductRepository;
 import com.api.ecommerce.products.infrastructure.persistence.specification.AdminProductSpecBuilder;
 import com.api.ecommerce.products.infrastructure.persistence.specification.ProductSpecificationBuilder;
+import com.api.ecommerce.products.domain.ImageData;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,8 +44,13 @@ public class ProductService implements IProductService{
         this.categoryRepository = categoryRepository;
     }
 
-    public ProductImage mapToImage(MultipartFile file, Product newProduct){
-        return new ProductImage(null, fileStorage.upload(file),newProduct);
+    private ProductImage createProductImage(MultipartFile file, Product product){
+        ImageData imageData = fileStorage.upload(file);
+        ProductImage newImage = new ProductImage();
+        newImage.setExternalId(imageData.fileId());
+        newImage.setUrl(imageData.imageUrl());
+        newImage.setProduct(product);
+        return newImage;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class ProductService implements IProductService{
         List<ProductImage> images =
                 requestDTO.images()
                 .stream()
-                .map(file -> mapToImage(file,newProduct))
+                .map(file -> createProductImage(file,newProduct))
                 .toList();
 
         List<ProductCategory> categories =
@@ -150,21 +156,17 @@ public class ProductService implements IProductService{
             productRepo.getImages().removeIf((image) -> {
                    boolean shouldDelete = deleteImages.contains(image.getId());
                    if(shouldDelete){
-                       fileStorage.delete(image.getUrl());
+                       fileStorage.delete(image.getExternalId());
                    }
                    return shouldDelete;
             });
         }
-        if (!newImages.isEmpty()){
-            for (MultipartFile file : newImages) {
-                String savedPath = fileStorage.upload(file);
-
-                ProductImage image = new ProductImage();
-                image.setUrl(savedPath);
-                image.setProduct(productRepo);
-
-                productRepo.getImages().add(image);
-            }
+        if (!newImages.isEmpty()) {
+            productRepo.getImages().addAll(
+                    newImages.stream()
+                             .map(file -> createProductImage(file, productRepo))
+                             .toList()
+            );
         }
 
         productRepository.save(productRepo);
@@ -192,6 +194,4 @@ public class ProductService implements IProductService{
     public List<LatestProductDTO> getLatestProducts(Pageable pageable) {
         return productRepository.findLatestProducts(pageable);
     }
-
-
 }
