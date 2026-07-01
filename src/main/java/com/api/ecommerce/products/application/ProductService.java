@@ -34,17 +34,17 @@ public class ProductService implements IProductService{
     private String urlApp;
 
     private final IProductRepository productRepository;
-    private final FileStorageService fileStorageService;
+    private final FileStorage fileStorage;
     private final IProductCategoryRepository categoryRepository;
 
-    public ProductService(IProductRepository productRepository, FileStorageService fileStorageService, IProductCategoryRepository categoryRepository) {
+    public ProductService(IProductRepository productRepository, FileStorage fileStorage, IProductCategoryRepository categoryRepository) {
         this.productRepository = productRepository;
-        this.fileStorageService = fileStorageService;
+        this.fileStorage = fileStorage;
         this.categoryRepository = categoryRepository;
     }
 
     public ProductImage mapToImage(MultipartFile file, Product newProduct){
-        return new ProductImage(null, fileStorageService.upload(file),newProduct);
+        return new ProductImage(null, fileStorage.upload(file),newProduct);
     }
 
     @Override
@@ -150,14 +150,14 @@ public class ProductService implements IProductService{
             productRepo.getImages().removeIf((image) -> {
                    boolean shouldDelete = deleteImages.contains(image.getId());
                    if(shouldDelete){
-                        fileStorageService.delete(image.getUrl());
+                       fileStorage.delete(image.getUrl());
                    }
                    return shouldDelete;
             });
         }
         if (!newImages.isEmpty()){
             for (MultipartFile file : newImages) {
-                String savedPath = fileStorageService.upload(file);
+                String savedPath = fileStorage.upload(file);
 
                 ProductImage image = new ProductImage();
                 image.setUrl(savedPath);
