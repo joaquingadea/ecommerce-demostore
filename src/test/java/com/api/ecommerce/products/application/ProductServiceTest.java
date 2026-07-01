@@ -1,9 +1,6 @@
 package com.api.ecommerce.products.application;
 
-import com.api.ecommerce.products.domain.Product;
-import com.api.ecommerce.products.domain.ProductCategory;
-import com.api.ecommerce.products.domain.ProductImage;
-import com.api.ecommerce.products.domain.ProductStatus;
+import com.api.ecommerce.products.domain.*;
 import com.api.ecommerce.products.dto.request.CreateProductDTO;
 import com.api.ecommerce.products.dto.request.EditProductDTO;
 import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRepository;
@@ -33,7 +30,7 @@ public class ProductServiceTest {
     @Mock
     private IProductRepository productRepository;
     @Mock
-    private FileStorageService fileStorageService;
+    private FileStorage fileStorage;
     @Mock
     private IProductCategoryRepository categoryRepository;
 
@@ -62,7 +59,7 @@ public class ProductServiceTest {
             when(categoryRepository.findAllById(List.of(1L)))
                     .thenReturn(List.of(category));
 
-            when(fileStorageService.saveFile(image))
+            when(fileStorage.upload(image))
                     .thenReturn("/upload/image.jpg");
 
 
@@ -158,8 +155,8 @@ public class ProductServiceTest {
 
             productService.editById(1L, dto);
 
-            verify(fileStorageService).deleteImage("/uploads/img1.jpg"); // se elimina una foto
-            verify(fileStorageService).saveFile(newImage); // se agrega una foto
+            verify(fileStorage).delete("/uploads/img1.jpg"); // se elimina una foto
+            verify(fileStorage).upload(newImage); // se agrega una foto
 
             ArgumentCaptor<Product> productCaptor = ArgumentCaptor.forClass(Product.class);
             verify(productRepository).save(productCaptor.capture());
