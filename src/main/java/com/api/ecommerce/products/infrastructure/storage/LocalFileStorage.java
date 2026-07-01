@@ -2,6 +2,7 @@ package com.api.ecommerce.products.infrastructure.storage;
 
 import com.api.ecommerce.products.domain.FileStorage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,12 +12,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@Service
+@Component
 @ConditionalOnProperty(
         name = "storage.provider",
         havingValue = "local"
 )
-public class LocalFileStorageService implements FileStorage {
+public class LocalFileStorage implements FileStorage {
 
     private final String uploadDir = "uploads/";
 
