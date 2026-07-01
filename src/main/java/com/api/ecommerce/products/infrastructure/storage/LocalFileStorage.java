@@ -1,11 +1,10 @@
 package com.api.ecommerce.products.infrastructure.storage;
 
 import com.api.ecommerce.products.domain.FileStorage;
+import com.api.ecommerce.products.domain.ImageData;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +21,7 @@ public class LocalFileStorage implements FileStorage {
     private final String uploadDir = "uploads/";
 
     @Override
-    public String upload(MultipartFile file){
+    public ImageData upload(MultipartFile file){
         try {
 
             // random ID + nombre del archivo (evita que se guarden archivos con nombre igual)
@@ -37,7 +36,7 @@ public class LocalFileStorage implements FileStorage {
             // escribe en el path guardado los bytes del archivo
             Files.write(path, file.getBytes());
 
-            return "/uploads/" + fileName;
+            return new ImageData(null,"/uploads/" + fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -55,6 +54,6 @@ public class LocalFileStorage implements FileStorage {
 
     @Override
     public String getUrl(String fileId) {
-        return "";
+        return null;
     }
 }
