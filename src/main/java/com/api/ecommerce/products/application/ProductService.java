@@ -1,9 +1,6 @@
 package com.api.ecommerce.products.application;
 
-import com.api.ecommerce.products.domain.Product;
-import com.api.ecommerce.products.domain.ProductCategory;
-import com.api.ecommerce.products.domain.ProductImage;
-import com.api.ecommerce.products.domain.ProductStatus;
+import com.api.ecommerce.products.domain.*;
 import com.api.ecommerce.products.dto.request.AdminProductFilter;
 import com.api.ecommerce.products.dto.request.CreateProductDTO;
 import com.api.ecommerce.products.dto.request.EditProductDTO;
@@ -13,7 +10,6 @@ import com.api.ecommerce.products.dto.response.LatestProductDTO;
 import com.api.ecommerce.products.dto.response.ProductSinglePageDTO;
 import com.api.ecommerce.products.dto.response.PublicProductDTO;
 import com.api.ecommerce.products.infrastructure.persistence.IProductCategoryRepository;
-import com.api.ecommerce.products.infrastructure.persistence.IProductImageRepository;
 import com.api.ecommerce.products.infrastructure.persistence.IProductRepository;
 import com.api.ecommerce.products.infrastructure.persistence.specification.AdminProductSpecBuilder;
 import com.api.ecommerce.products.infrastructure.persistence.specification.ProductSpecificationBuilder;
@@ -29,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -49,7 +44,7 @@ public class ProductService implements IProductService{
     }
 
     public ProductImage mapToImage(MultipartFile file, Product newProduct){
-        return new ProductImage(null, fileStorageService.saveFile(file),newProduct);
+        return new ProductImage(null, fileStorageService.upload(file),newProduct);
     }
 
     @Override
@@ -155,14 +150,14 @@ public class ProductService implements IProductService{
             productRepo.getImages().removeIf((image) -> {
                    boolean shouldDelete = deleteImages.contains(image.getId());
                    if(shouldDelete){
-                        fileStorageService.deleteImage(image.getUrl());
+                        fileStorageService.delete(image.getUrl());
                    }
                    return shouldDelete;
             });
         }
         if (!newImages.isEmpty()){
             for (MultipartFile file : newImages) {
-                String savedPath = fileStorageService.saveFile(file);
+                String savedPath = fileStorageService.upload(file);
 
                 ProductImage image = new ProductImage();
                 image.setUrl(savedPath);
