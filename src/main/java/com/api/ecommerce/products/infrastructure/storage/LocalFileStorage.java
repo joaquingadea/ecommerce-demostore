@@ -1,6 +1,6 @@
 package com.api.ecommerce.products.infrastructure.storage;
 
-import com.api.ecommerce.products.domain.FileStorageService;
+import com.api.ecommerce.products.domain.FileStorage;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +16,7 @@ import java.util.UUID;
         name = "storage.provider",
         havingValue = "local"
 )
-public class LocalFileStorageService implements FileStorageService {
+public class LocalFileStorageService implements FileStorage {
 
     private final String uploadDir = "uploads/";
 
