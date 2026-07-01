@@ -36,24 +36,19 @@ public class LocalFileStorage implements FileStorage {
             // escribe en el path guardado los bytes del archivo
             Files.write(path, file.getBytes());
 
-            return new ImageData(null,"/uploads/" + fileName);
+            return new ImageData(fileName,"/uploads/" + fileName);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     @Override
-    public void delete(String imagePath){
+    public void delete(String fileName){
         try {
-            Path path = Paths.get(imagePath);
+            Path path = Paths.get("/uploads/" + fileName);
             Files.deleteIfExists(path);
         }
         catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public String getUrl(String fileId) {
-        return null;
     }
 }
