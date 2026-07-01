@@ -4,10 +4,7 @@ import com.api.ecommerce.payments.infrastructure.mercadopago.dto.request.Mercado
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/webhooks/mercadopago")
@@ -18,9 +15,13 @@ public class MercadoPagoWebhookController {
     public MercadoPagoWebhookController(MercadoPagoWebhookService webhookService) {
         this.webhookService = webhookService;
     }
-    
-    @PostMapping
-    public ResponseEntity<Void> receiveWebhook(HttpServletRequest request, @RequestBody MercadoPagoNotificationDTO notification){
+    @GetMapping
+    public ResponseEntity<String> test() {
+        System.out.println("GET RECIBIDO");
+        return ResponseEntity.ok("OK");
+    }
+    /*@PostMapping
+    public ResponseEntity<Void> receiveWebhook(HttpServletRequest request, @RequestBody(required = false) MercadoPagoNotificationDTO notification){
         try {
             //validate(request);
             webhookService.process(notification);
@@ -31,5 +32,12 @@ public class MercadoPagoWebhookController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .build();
         }
+    }*/
+    @PostMapping // ENDPOINT DE TEST PARA VER SI FUNCIONA LA CONEXION CON LA API
+    public ResponseEntity<Void> receiveWebhook(
+            @RequestBody(required = false) String body) {
+
+        System.out.println(body);
+        return ResponseEntity.ok().build();
     }
 }
