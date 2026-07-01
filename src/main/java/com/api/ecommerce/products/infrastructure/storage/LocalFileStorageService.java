@@ -1,5 +1,7 @@
-package com.api.ecommerce.products.application;
+package com.api.ecommerce.products.infrastructure.storage;
 
+import com.api.ecommerce.products.domain.FileStorageService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,11 +12,16 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @Service
-public class LocalFileStorageService {
+@ConditionalOnProperty(
+        name = "storage.provider",
+        havingValue = "local"
+)
+public class LocalFileStorageService implements FileStorageService {
 
     private final String uploadDir = "uploads/";
 
-    public String saveFile(MultipartFile file){
+    @Override
+    public String upload(MultipartFile file){
         try {
 
             // random ID + nombre del archivo (evita que se guarden archivos con nombre igual)
@@ -34,8 +41,8 @@ public class LocalFileStorageService {
             throw new RuntimeException(e);
         }
     }
-
-    public void deleteImage(String imagePath){
+    @Override
+    public void delete(String imagePath){
         try {
             Path path = Paths.get(imagePath);
             Files.deleteIfExists(path);
@@ -45,4 +52,8 @@ public class LocalFileStorageService {
         }
     }
 
+    @Override
+    public String getUrl(String fileId) {
+        return "";
+    }
 }
