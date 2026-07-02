@@ -60,7 +60,7 @@ public class ProductServiceTest {
                     .thenReturn(List.of(category));
 
             when(fileStorage.upload(image))
-                    .thenReturn("/upload/image.jpg");
+                    .thenReturn(new ImageData("image.jpg","/upload/image.jpg"));
 
 
             productService.create(dto);
